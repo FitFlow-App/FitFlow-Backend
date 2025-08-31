@@ -7,7 +7,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL") // Asegúrate de tener tu variable de entorno configurada
+  url      = env("DATABASE_URL")
 }
 
 model Usuario {
@@ -15,7 +15,7 @@ model Usuario {
   nombre  String
   email   String   @unique
   password String
-  rutinas Rutina[]
+  rutinas  Rutina[]
 }
 
 model Rutina {
@@ -36,13 +36,15 @@ model Ejercicio {
 }
 
 model RutinaEjercicio {
-  rutinaId    Int
-  ejercicioId Int
-  series      Int?
+  id           Int       @id @default(autoincrement())
+  rutinaId     Int
+  ejercicioId  Int
+  series       Int?
   repeticiones Int?
-  peso        Float?
-  rutina      Rutina    @relation(fields: [rutinaId], references: [id])
-  ejercicio   Ejercicio @relation(fields: [ejercicioId], references: [id])
+  peso         Float?
+  rutina       Rutina    @relation(fields: [rutinaId], references: [id])
+  ejercicio    Ejercicio @relation(fields: [ejercicioId], references: [id])
 
-  @@id([rutinaId, ejercicioId])
+  @@unique([rutinaId, ejercicioId])
 }
+

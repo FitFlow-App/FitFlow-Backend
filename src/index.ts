@@ -3,6 +3,7 @@ import routineRoutes from './routes/routines.routes';
 import userRoutes from './routes/user.routes';
 import { logger } from './middlewares/logger';
 import ejerciciosRoutes from './routes/ejercicios.routes';
+import routineExercisesRoutes from './routes/routinesExercises.routes';
 
 const app = express();
 const port = 3000;
@@ -16,6 +17,7 @@ app.use(logger);
 // Rutas
 app.use('/api/routines', routineRoutes);
 app.use('/api/users', userRoutes); // Sin protección
+app.use('/api/routine-exercises', routineExercisesRoutes); // Sin protección
 // app.use('/api/users', authMiddleware, userRoutes); // Con protección
 app.use('/api/ejercicios', ejerciciosRoutes);
 
@@ -26,3 +28,5 @@ app.get('/', (req, res) => {
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
+
+app.use(require('./middlewares/errorHandle').errorHandler);
