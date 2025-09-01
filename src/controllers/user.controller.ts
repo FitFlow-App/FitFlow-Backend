@@ -49,7 +49,7 @@ export const userController = {
   async delete(req: Request, res: Response) {
     try {
       await userService.delete(Number(req.params.id));
-      res.status(204).send();
+      res.status(201).send({ message: 'Usuario eliminado.' });
     } catch (error) {
       res.status(500).json({ error: 'Error al eliminar usuario' });
     }

@@ -52,7 +52,7 @@ export const deleteRoutine = async (req: Request, res: Response) => {
     const id = parseInt(req.params.id);
     const deletedRoutine = await routineService.remove(id);
     if (deletedRoutine) {
-      res.status(200).json({ message: 'Routine deleted successfully' });
+      res.status(200).json({ message: 'Rutina eliminada.' });
     } else {
       res.status(404).json({ message: 'Routine not found' });
     }
