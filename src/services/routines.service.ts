@@ -10,12 +10,29 @@ interface RoutineData {
 }
 
 export const getAll = async () => {
-  return await prisma.rutina.findMany();
+  return await prisma.rutina.findMany({
+    include: {
+      ejercicios: {
+        include: {
+          ejercicio: true
+        }
+      },
+      DiaPlanificado: true
+    }
+  });
 };
 
 export const getById = async (id: number) => {
   return await prisma.rutina.findUnique({
     where: { id },
+    include: {
+      ejercicios: {
+        include: {
+          ejercicio: true
+        }
+      },
+      DiaPlanificado: true
+    }
   });
 };
 

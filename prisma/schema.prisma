@@ -11,11 +11,38 @@ datasource db {
 }
 
 model Usuario {
-  id      Int      @id @default(autoincrement())
-  nombre  String
-  email   String   @unique
-  password String
-  rutinas  Rutina[]
+  id        Int       @id @default(autoincrement())
+  nombre    String
+  email     String    @unique
+  password  String
+  rutinas   Rutina[]
+  planificaciones PlanificacionSemanal[]
+}
+
+model PlanificacionSemanal {
+  id          Int      @id @default(autoincrement())
+  nombre      String   // Ej: "Planificación Septiembre", "Volumen 1", etc.
+  numero      Int      // Número de semana (1, 2, 3...)
+  usuarioId   Int
+  usuario     Usuario  @relation(fields: [usuarioId], references: [id])
+  dias        DiaPlanificado[]
+  activa      Boolean  @default(false)
+  
+  @@unique([usuarioId, numero])
+}
+
+model DiaPlanificado {
+  id          Int      @id @default(autoincrement())
+  nombre      String   // Ej: "Lunes - Piernas", "Martes - Pecho", etc.
+  diaSemana   Int      // 1: Lunes, 2: Martes, ..., 7: Domingo
+  planificacionId Int
+  planificacion PlanificacionSemanal @relation(fields: [planificacionId], references: [id])
+  rutinaId    Int
+  rutina      Rutina   @relation(fields: [rutinaId], references: [id])
+  completado  Boolean  @default(false)
+  fecha       DateTime? // Opcional: para tracking específico
+  
+  @@unique([planificacionId, diaSemana])
 }
 
 model Rutina {
@@ -25,6 +52,9 @@ model Rutina {
   usuarioId   Int
   usuario     Usuario  @relation(fields: [usuarioId], references: [id])
   ejercicios  RutinaEjercicio[]
+  // Eliminamos la relación inversa a Dia para evitar circularidad
+
+  DiaPlanificado DiaPlanificado[]
 }
 
 model Ejercicio {

@@ -7,6 +7,8 @@ import routineExercisesRoutes from './routes/routinesExercises.routes';
 import { verifyToken } from './middlewares/auth';
 import loginRoutes from './routes/login.routes';
 import cors from 'cors';
+import planificacionRoutes from './routes/planificacion.routes';
+import { errorHandler } from './middlewares/errorHandle';
 
 const app = express();
 const port = 3000;
@@ -26,6 +28,10 @@ app.use('/api/routine-exercises', verifyToken, routineExercisesRoutes);
 // app.use('/api/users', authMiddleware, userRoutes); // Con protección
 app.use('/api/ejercicios', ejerciciosRoutes);
 app.use('/api', loginRoutes);
+app.use('/api/planificaciones', planificacionRoutes);
+
+app.use(errorHandler);
+
 
 app.get('/', (req, res) => {
   res.send('FitFlow API is running!');
