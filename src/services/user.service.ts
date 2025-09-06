@@ -22,8 +22,8 @@ export const userService = {
         id: true,
         nombre: true,
         email: true,
-        rutinas: true
-      }
+        rutinas: true,
+      },
     });
   },
 
@@ -34,8 +34,8 @@ export const userService = {
         id: true,
         nombre: true,
         email: true,
-        rutinas: true
-      }
+        rutinas: true,
+      },
     });
   },
 
@@ -45,18 +45,21 @@ export const userService = {
     return prisma.usuario.create({
       data: {
         ...data,
-        password: hashedPassword
+        password: hashedPassword,
       },
       select: {
         id: true,
         nombre: true,
         email: true,
-        rutinas: true
-      }
+        rutinas: true,
+      },
     });
   },
 
-  async update(id: number, data: UpdateUserData): Promise<Omit<Usuario, 'password'>> {
+  async update(
+    id: number,
+    data: UpdateUserData
+  ): Promise<Omit<Usuario, 'password'>> {
     if (data.password) {
       data.password = await bcrypt.hash(data.password, 10);
     }
@@ -68,14 +71,14 @@ export const userService = {
         id: true,
         nombre: true,
         email: true,
-        rutinas: true
-      }
+        rutinas: true,
+      },
     });
   },
 
   async delete(id: number): Promise<void> {
     await prisma.usuario.delete({
-      where: { id }
+      where: { id },
     });
-  }
+  },
 };
