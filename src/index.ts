@@ -32,13 +32,13 @@ app.use('/api/planificaciones', planificacionRoutes);
 
 app.use(errorHandler);
 
-
 app.get('/', (req, res) => {
   res.send('FitFlow API is running!');
 });
 
-app.listen(port, () => {
+app.listen(port, '0.0.0.0', () => {
   console.log(`Server is running on http://localhost:${port}`);
+  // Aquí podrías añadir un console.log con tu IP de red si quieres
 });
 
 app.use(require('./middlewares/errorHandle').errorHandler);
