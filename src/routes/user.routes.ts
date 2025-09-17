@@ -16,6 +16,7 @@ router.get('/:id', userController.getById);
 router.post('/', userController.create);
 router.put('/:id', userController.update);
 router.delete('/:id', userController.delete);
+router.put('/:id/password', userController.changePassword);
 
 // router.get('/users/filter/:nombre', filterUser);
 // router.get('/users/order', ordenUser);
