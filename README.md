@@ -117,6 +117,8 @@ npm run prisma:reset
 
 - PUT /api/users/:id - Actualizar usuario
 
+- PUT /api/users/:id/password - Cambiar contraseña
+
 - DELETE /api/users/:id - Eliminar usuario
 
 ### Ejercicios
