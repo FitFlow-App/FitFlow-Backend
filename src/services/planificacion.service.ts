@@ -1,4 +1,8 @@
-import { PrismaClient, PlanificacionSemanal, DiaPlanificado } from '@prisma/client';
+import {
+  PrismaClient,
+  PlanificacionSemanal,
+  DiaPlanificado,
+} from '@prisma/client';
 
 const prisma = new PrismaClient();
 
@@ -30,7 +34,6 @@ export interface UpdateDiaPlanificadoData {
 }
 
 export const planificacionService = {
-  // Planificaciones
   async getAllByUsuario(usuarioId: number): Promise<PlanificacionSemanal[]> {
     return prisma.planificacionSemanal.findMany({
       where: { usuarioId },
@@ -38,17 +41,11 @@ export const planificacionService = {
         dias: {
           include: {
             rutina: {
-              include: {
-                ejercicios: {
-                  include: {
-                    ejercicio: true
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
+              include: { ejercicios: { include: { ejercicio: true } } },
+            },
+          },
+        },
+      },
     });
   },
 
@@ -59,17 +56,11 @@ export const planificacionService = {
         dias: {
           include: {
             rutina: {
-              include: {
-                ejercicios: {
-                  include: {
-                    ejercicio: true
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
+              include: { ejercicios: { include: { ejercicio: true } } },
+            },
+          },
+        },
+      },
     });
   },
 
@@ -80,21 +71,18 @@ export const planificacionService = {
         dias: {
           include: {
             rutina: {
-              include: {
-                ejercicios: {
-                  include: {
-                    ejercicio: true
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
+              include: { ejercicios: { include: { ejercicio: true } } },
+            },
+          },
+        },
+      },
     });
   },
 
-  async update(id: number, data: UpdatePlanificacionData): Promise<PlanificacionSemanal> {
+  async update(
+    id: number,
+    data: UpdatePlanificacionData
+  ): Promise<PlanificacionSemanal> {
     return prisma.planificacionSemanal.update({
       where: { id },
       data,
@@ -102,96 +90,78 @@ export const planificacionService = {
         dias: {
           include: {
             rutina: {
-              include: {
-                ejercicios: {
-                  include: {
-                    ejercicio: true
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
+              include: { ejercicios: { include: { ejercicio: true } } },
+            },
+          },
+        },
+      },
     });
   },
 
   async delete(id: number): Promise<void> {
+    // Primero, borramos todos los días asociados a esta planificación.
+    await prisma.diaPlanificado.deleteMany({
+      where: {
+        planificacionId: id,
+      },
+    });
+
+    // Ahora que ya no tiene hijos, podemos borrar la planificación.
     await prisma.planificacionSemanal.delete({
-      where: { id }
+      where: { id },
     });
   },
 
-  async activatePlanificacion(usuarioId: number, planificacionId: number): Promise<void> {
-    // Desactivar todas las planificaciones del usuario
+  async activatePlanificacion(
+    usuarioId: number,
+    planificacionId: number
+  ): Promise<void> {
     await prisma.planificacionSemanal.updateMany({
       where: { usuarioId },
-      data: { activa: false }
+      data: { activa: false },
     });
-
-    // Activar la planificación específica
     await prisma.planificacionSemanal.update({
       where: { id: planificacionId },
-      data: { activa: true }
+      data: { activa: true },
     });
   },
 
-  // Días planificados
   async createDia(data: CreateDiaPlanificadoData): Promise<DiaPlanificado> {
     return prisma.diaPlanificado.create({
       data,
       include: {
-        rutina: {
-          include: {
-            ejercicios: {
-              include: {
-                ejercicio: true
-              }
-            }
-          }
-        }
-      }
+        rutina: { include: { ejercicios: { include: { ejercicio: true } } } },
+      },
     });
   },
 
-  async updateDia(id: number, data: UpdateDiaPlanificadoData): Promise<DiaPlanificado> {
+  async updateDia(
+    id: number,
+    data: UpdateDiaPlanificadoData
+  ): Promise<DiaPlanificado> {
     return prisma.diaPlanificado.update({
       where: { id },
       data,
       include: {
-        rutina: {
-          include: {
-            ejercicios: {
-              include: {
-                ejercicio: true
-              }
-            }
-          }
-        }
-      }
+        rutina: { include: { ejercicios: { include: { ejercicio: true } } } },
+      },
     });
   },
 
   async deleteDia(id: number): Promise<void> {
     await prisma.diaPlanificado.delete({
-      where: { id }
+      where: { id },
     });
   },
 
-  async getDiasByPlanificacion(planificacionId: number): Promise<DiaPlanificado[]> {
+  async getDiasByPlanificacion(
+    planificacionId: number
+  ): Promise<DiaPlanificado[]> {
     return prisma.diaPlanificado.findMany({
       where: { planificacionId },
       include: {
-        rutina: {
-          include: {
-            ejercicios: {
-              include: {
-                ejercicio: true
-              }
-            }
-          }
-        }
-      }
+        rutina: { include: { ejercicios: { include: { ejercicio: true } } } },
+      },
     });
   },
 
@@ -199,16 +169,8 @@ export const planificacionService = {
     return prisma.diaPlanificado.findUnique({
       where: { id },
       include: {
-        rutina: {
-          include: {
-            ejercicios: {
-              include: {
-                ejercicio: true
-              }
-            }
-          }
-        }
-      }
+        rutina: { include: { ejercicios: { include: { ejercicio: true } } } },
+      },
     });
-  }
+  },
 };
